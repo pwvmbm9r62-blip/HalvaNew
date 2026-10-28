@@ -768,6 +768,27 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
 #choose .person-card[data-client="elena"] .person-avatar,#game [data-client="elena"] .desktop-client-avatar,#game .chat-face.elena {background-image:var(--halva-cartoon-avatars) !important;background-position:66.667% 50% !important;background-size:400% 100% !important;}
 #choose .person-card[data-client="maxim"] .person-avatar,#game [data-client="maxim"] .desktop-client-avatar,#game .chat-face.maxim {background-image:var(--halva-cartoon-avatars) !important;background-position:100% 50% !important;background-size:400% 100% !important;}
 @media(max-width:420px) {#choose .person-card{grid-template-columns:62px minmax(0,1fr) auto}#choose .person-card .person-avatar{width:62px;height:62px;border-radius:18px}}
+
+/* Grand finale: standalone summary available after 4/4 */
+.final-recap-trigger{display:block;width:100%;margin-top:16px;padding:15px 18px;border:0;border-radius:17px;background:linear-gradient(115deg,#187cdb,#3656eb);color:#fff;font-size:15px;font-weight:800;box-shadow:0 10px 25px #2244b52e;cursor:pointer}
+.final-recap-trigger[hidden],.final-recap-modal[hidden]{display:none!important}
+.final-recap-modal{position:fixed;z-index:10000;inset:0;background:#05182cbb;backdrop-filter:blur(9px);display:flex;justify-content:center;align-items:center;padding:18px max(12px,env(safe-area-inset-right)) 18px max(12px,env(safe-area-inset-left))}
+.final-recap-scroll{position:relative;width:min(650px,100%);max-height:min(92dvh,850px);overflow-y:auto;overscroll-behavior:contain;border:1px solid #d8e8f7;border-radius:28px;background:linear-gradient(165deg,#fff 2%,#eaf6ff 75%,#e4edff);box-shadow:0 30px 85px #0007;padding:clamp(20px,5vw,34px);color:#163557}
+.final-recap-close{position:sticky;top:0;float:right;z-index:2;width:38px;height:38px;border-radius:50%;border:1px solid #c3d7ed;background:#fff;color:#345c88;font-size:25px;line-height:1;cursor:pointer}
+.final-recap-trophy{display:grid;place-items:center;margin:14px 0 18px;width:70px;height:70px;border-radius:23px;background:linear-gradient(135deg,#e3fff4,#b8e9ff);box-shadow:0 12px 28px #23a0bf27;font-size:36px}
+.final-recap-overline{font-size:11px;letter-spacing:.18em;color:#5385bc;font-weight:900}
+.final-recap-scroll h2{font-size:clamp(26px,6vw,37px);line-height:1.11;color:#102c56;margin:9px 0 14px;font-weight:900;letter-spacing:-.035em}
+.final-recap-lead{font-size:16px;line-height:1.58;color:#43607c;margin:0 0 20px}
+.final-recap-line{height:1px;background:#cadff0;margin:20px 0}
+.final-recap-section{padding:18px;border-radius:21px;border:1px solid #d6e6f6;background:#ffffffc9;margin-top:12px}
+.final-recap-section h3{font-size:17px;margin:0 0 10px;color:#173c6d}
+.final-recap-section p{margin:0;font-size:14px;line-height:1.58;color:#365570}
+.final-recap-mini{display:flex;align-items:flex-start;gap:10px;margin-top:13px;font-size:14px;line-height:1.48;color:#234b6f}
+.final-recap-mini b{display:grid;place-items:center;flex:0 0 26px;height:26px;background:#e4f4ff;color:#1678c2;border-radius:50%;font-size:12px}
+.final-recap-voice{background:linear-gradient(125deg,#e5f9f2,#e1f3ff);border-color:#a9ddcd}
+.final-recap-voice h3{color:#11755d}
+.final-recap-footer{margin-top:18px;font-size:13px;line-height:1.55;color:#5b7290}
+.final-recap-return{width:100%;margin-top:18px;padding:16px 18px;border:0;border-radius:17px;color:white;font-size:15px;font-weight:800;background:linear-gradient(105deg,#2499e8,#3158ed);cursor:pointer}
 </style>
 <style id="no-answer-hints">
 /* All unselected answers look alike on touchscreens; keyboard focus remains accessible. */
@@ -830,6 +851,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
       <div class="level-track" role="progressbar" id="levelProgress" aria-label="Пройдено уровней" aria-valuemin="0" aria-valuemax="4" aria-valuenow="0"><span id="levelFill"></span></div>
       <div class="level-dots" id="levelDots" aria-hidden="true"><span>1</span><span>2</span><span>3</span><span>★</span></div>
       <div class="level-dashboard-note" id="levelProgressNote">Впереди 4 испытания</div>
+      <button type="button" class="final-recap-trigger" id="finalRecapFromChoose" hidden>🏆 Посмотреть итог игры</button>
     </div>
   </div>
   <div class="people-grid">
@@ -891,12 +913,47 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
       <div class="ending-summary-rows" id="endingSummaryRows"></div>
     </section>
     <div class="level-victory" id="levelVictory" hidden aria-live="polite"><span class="level-victory-icon" id="levelVictoryIcon" aria-hidden="true">✦</span><div><strong id="levelVictoryTitle">Уровень пройден!</strong><p id="levelVictoryDesc"></p></div></div>
+    <button class="final-recap-trigger" id="finalRecapFromEnding" type="button" hidden>✨ Открыть итог всех четырёх уровней</button>
     <div class="ending-actions"><button class="level-next" id="nextLevel" type="button" hidden>Следующий уровень →</button><button class="ending-primary" id="restart" type="button">↻ Пройти ещё раз</button><button class="ending-secondary" id="anotherClient" type="button">Выбрать другого клиента</button></div></div>
    </aside>
   </div>
   <p class="game-footnote" id="footer">Сценарии учебные. Условия Халвы сверяй с актуальной базой знаний.</p>
  </section>
 </main>
+
+<div class="final-recap-modal" id="finalRecapModal" role="dialog" aria-modal="true" aria-labelledby="finalRecapTitle" hidden>
+ <div class="final-recap-scroll" id="finalRecapScroll" tabindex="-1">
+  <button class="final-recap-close" id="finalRecapClose" type="button" aria-label="Закрыть итог">×</button>
+  <div class="final-recap-trophy" aria-hidden="true">🏆</div>
+  <div class="final-recap-overline">МИССИЯ ВЫПОЛНЕНА · 4 ИЗ 4</div>
+  <h2 id="finalRecapTitle">Ты прошёл все четыре испытания!</h2>
+  <p class="final-recap-lead">Поздравляем! Ты потренировался общаться с разными клиентами: от первых сомнений до сложных вопросов о банковских продуктах. Но настоящий мастер диалога не ищет одну заученную фразу — он слышит человека и предлагает то, что ему действительно нужно.</p>
+  <div class="final-recap-section">
+   <h3>💙 Основа сильного разговора</h3>
+   <div class="final-recap-mini"><b>1</b><span><strong>Выяви потребность.</strong> Задавай короткие, уместные вопросы и слушай ответ. Что важно именно этому клиенту: повседневные покупки, рассрочка, накопления или другие возможности?</span></div>
+   <div class="final-recap-mini"><b>2</b><span><strong>Адаптируй презентацию.</strong> Не перечисляй все функции Халвы подряд. Покажи преимущества, которые отвечают на интерес клиента, и говори понятным языком.</span></div>
+   <div class="final-recap-mini"><b>3</b><span><strong>Продавай то, что действительно нужно.</strong> Не обещай лишнего, не скрывай условия, не навязывай ненужные услуги. Знание продукта и точная консультация укрепляют доверие.</span></div>
+   <div class="final-recap-mini"><b>4</b><span><strong>Предлагай следующий шаг.</strong> Когда интерес сформирован, переходи к доставке карты, если она доступна в городе проживания или работы. Если доставки нет или после отработки возражения клиент предпочитает офис — помоги записаться.</span></div>
+  </div>
+  <div class="final-recap-section">
+   <h3>🧩 Работа с возражениями — УПАП</h3>
+   <div class="final-recap-mini"><b>У</b><span><strong>Уточнение:</strong> выясни, что стоит за сомнением клиента.</span></div>
+   <div class="final-recap-mini"><b>П</b><span><strong>Присоединение:</strong> покажи, что услышал и понял его опасение.</span></div>
+   <div class="final-recap-mini"><b>А</b><span><strong>Аргумент:</strong> предложи конкретную, достоверную пользу Халвы под потребность.</span></div>
+   <div class="final-recap-mini"><b>П</b><span><strong>Призыв к действию:</strong> задай вопрос и предложи удобный следующий шаг.</span></div>
+   <p style="margin-top:14px">УПАП помогает работать с возражением, но не заменяет выявление потребности, живую презентацию и внимательное отношение к клиенту.</p>
+  </div>
+  <div class="final-recap-section final-recap-voice">
+   <h3>✨ То, что слышно в голосе</h3>
+   <p><strong>Доброжелательный, живой тон — в голосе слышна улыбка.</strong> Проявляй эмпатию, терпение и искреннее желание помочь. Клиент чувствует заботу или безразличие, и это напрямую влияет на доверие к банку. Не просто читай скрипт — разговаривай с человеком.</p>
+  </div>
+  <div class="final-recap-line"></div>
+  <p class="final-recap-lead"><strong>Игра завершена, но тренировка продолжается.</strong> Возвращайся к любому персонажу, выбирай другие ответы, изучай последствия ошибок и находи новые способы вести диалог. 💙</p>
+  <button type="button" class="final-recap-return" id="finalRecapReturn">🎮 Вернуться к уровням</button>
+  <p class="final-recap-footer">Перед консультацией обязательно сверяй продуктовые условия и тарифы с актуальной базой знаний банка.</p>
+ </div>
+</div>
+
 <!-- HALVA_METRIKA_START -->
 <!--
   Аналитика Яндекс Метрики для интерактива «Халва. Твой выбор».
@@ -996,6 +1053,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
   });
   $('guideHint').textContent=count===4?'Все уровни пройдены! 🏆':count===0?'Начни с Ильи 👇':'Следующий — '+LEVEL_NAMES[count]+' 👇';
   $('levelProgressNote').textContent=count===4?'🏆 Ты — мастер диалога!':count===0?'Впереди 4 испытания':'Осталось пройти: '+(4-count);
+  $('finalRecapFromChoose').hidden=count!==4;
  }
  function completeLevel(){
   const index=LEVELS.indexOf(currentClient);
@@ -1011,6 +1069,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
   $('nextLevel').hidden=false;
   $('nextLevel').textContent=champion?'🏆 Посмотреть карту уровней':'Перейти к уровню '+(index+2)+' →';
   $('nextLevel').dataset.next=champion?'choose':LEVELS[index+1];
+  $('finalRecapFromEnding').hidden=count!==4;
  }
 
  const outcome={good:{icon:'✦',label:'КЛИЕНТ ЗАИНТЕРЕСОВАЛСЯ',title:'Разговор получился!'},neutral:{icon:'♡',label:'ПОКА БЕЗ ОФОРМЛЕНИЯ',title:'Клиенту нужно время'},missed:{icon:'!',label:'УПУЩЕНА ВОЗМОЖНОСТЬ',title:'Разговор завершён слишком рано'},bad:{icon:'↯',label:'ИНТЕРЕС ПОТЕРЯН',title:'Не всё прошло гладко'}};
@@ -1049,7 +1108,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
   return row;
  }
  function resetStory(){
-  turn=0;visitedNodes=[];selectedMoves=[];log.replaceChildren();endingPanel.hidden=true;$('endingSummary').hidden=true;$('levelVictory').hidden=true;$('nextLevel').hidden=true;$('answerArea').hidden=false;
+  turn=0;visitedNodes=[];selectedMoves=[];log.replaceChildren();endingPanel.hidden=true;$('endingSummary').hidden=true;$('levelVictory').hidden=true;$('nextLevel').hidden=true;$('finalRecapFromEnding').hidden=true;$('answerArea').hidden=false;
   enterNode('start',null,false);
  }
  function buildSuccessRecap(){ return buildObjectionRecap(); }
@@ -1120,7 +1179,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
    $('endingIcon').textContent=ending.icon;$('endingType').textContent=ending.label;
    $('endingTitle').textContent=ending.title;$('endingLesson').textContent=n.ending==='good'?(currentClient==='alisa'?'Ты отработал возражение, рассказал условия про покупки с бесплатной рассрочкой и клиент согласился на доставку. Давай разберём подробнее.':currentClient==='elena'?'Ты помог клиенту убедиться в безопасности звонка, рассказал про Онлайн-копилку и дополнительные преимущества Халвы, отработал три возражения и согласовал доставку. Давай разберём подробнее.':'Вы разобрали возражения и согласовали следующий шаг — проверку условий и возможное оформление, если клиенту подходит предложение. Разберём УПАП.'):n.lesson;
    $('endingSummary').hidden=n.ending!=='good';
-   if(n.ending==='good'){renderSuccessRecap();completeLevel()}else{$('levelVictory').hidden=true;$('nextLevel').hidden=true}
+   if(n.ending==='good'){renderSuccessRecap();completeLevel()}else{$('levelVictory').hidden=true;$('nextLevel').hidden=true;$('finalRecapFromEnding').hidden=true}
   }else{
    endingPanel.hidden=true;$('answerArea').hidden=false;
    choices.replaceChildren();
@@ -1152,6 +1211,27 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
  $('chooseBack').addEventListener('click',showHome);
  $('backToChoose').addEventListener('click',showChoose);
  $('restart').addEventListener('click',()=>{resetStory();toTop()});
+
+ let recapPreviousFocus=null;
+ function openFinalRecap(){
+  if(completedLevels.length!==4)return;
+  recapPreviousFocus=document.activeElement;
+  $('finalRecapModal').hidden=false;
+  document.body.style.overflow='hidden';
+  $('finalRecapScroll').scrollTop=0;
+  $('finalRecapClose').focus();
+ }
+ function closeFinalRecap(){
+  $('finalRecapModal').hidden=true;
+  document.body.style.overflow='';
+  if(recapPreviousFocus&&recapPreviousFocus.isConnected)recapPreviousFocus.focus();
+ }
+ $('finalRecapFromChoose').addEventListener('click',openFinalRecap);
+ $('finalRecapFromEnding').addEventListener('click',openFinalRecap);
+ $('finalRecapClose').addEventListener('click',closeFinalRecap);
+ $('finalRecapModal').addEventListener('click',e=>{if(e.target===$('finalRecapModal'))closeFinalRecap()});
+ $('finalRecapReturn').addEventListener('click',()=>{closeFinalRecap();showChoose()});
+ document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('finalRecapModal').hidden)closeFinalRecap()});
  $('nextLevel').addEventListener('click',()=>{const next=$('nextLevel').dataset.next;if(next==='choose')showChoose();else startClient(next)});
  $('resetLevels').addEventListener('click',()=>{if(!window.confirm('Сбросить все пройденные уровни? Илья снова станет первым доступным персонажем.'))return;completedLevels=[];saveLevels();renderLevels()});
  $('anotherClient').addEventListener('click',showChoose);
