@@ -816,7 +816,7 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
   </header>
   <div>
     <h1 class="choose-title">Путь к <em>PRO.</em></h1>
-    <p class="choose-sub">Четыре клиента. Четыре испытания по УПАП. Разбери возражения, заинтересуй каждого — и открой следующий уровень.</p>
+    <p class="choose-sub">Четыре клиента. Четыре испытания. Выяви потребность для каждого клиента, отработай возражения, заинтересуй — и открой следующий уровень.</p>
   </div>
   <div class="guide-card">
     <div class="guide-avatar" aria-hidden="true"></div>
@@ -988,9 +988,9 @@ button{font:inherit;-webkit-tap-highlight-color:transparent;touch-action:manipul
    btn.dataset.levelState=done?'done':active?'current':'locked';
    btn.disabled=locked;
    const status=btn.querySelector('.level-state');
-   status.textContent=(done?'✓ УРОВЕНЬ ПРОЙДЕН':active?(i===3?'★ ФИНАЛЬНЫЙ УРОВЕНЬ · ДОСТУПЕН':'▶ УРОВЕНЬ ДОСТУПЕН'):'🔒 ОТКРОЕТСЯ ПОСЛЕ УРОВНЯ '+i)+' · '+LEVEL_TURNS[i]+' РЕШЕНИЙ';
+   status.textContent=(done?'✓ УРОВЕНЬ ПРОЙДЕН':active?(i===3?'★ ФИНАЛЬНЫЙ УРОВЕНЬ · ДОСТУПЕН':'▶ УРОВЕНЬ ДОСТУПЕН'):'🔒 ОТКРОЕТСЯ ПОСЛЕ УРОВНЯ '+i);
    btn.querySelector('.go').textContent=done?'✓':active?'›':'🔒';
-   btn.setAttribute('aria-label','Уровень '+(i+1)+': '+LEVEL_NAMES[i]+'. '+LEVEL_TURNS[i]+' решений. '+(done?'Пройден, можно повторить.':active?'Доступен.':'Закрыт, пройдите предыдущий уровень.'));
+   btn.setAttribute('aria-label','Уровень '+(i+1)+': '+LEVEL_NAMES[i]+'. '+(done?'Пройден, можно повторить.':active?'Доступен.':'Закрыт, пройдите предыдущий уровень.'));
    dots[i].dataset.state=done?'done':active?'current':'locked';
    dots[i].textContent=done?'✓':i===3?'★':String(i+1);
   });
